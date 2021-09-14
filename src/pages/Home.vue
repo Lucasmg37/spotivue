@@ -203,7 +203,11 @@ export default Home;
 
   > h1 {
     font-size: 48px;
-    padding: 0 48px;
+    padding: 0 16px;
+
+    @include md {
+      padding-left: 48px;
+    }
   }
 
   > div {

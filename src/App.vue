@@ -6,6 +6,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
+
 export default {
   name: 'App',
   data: function() {

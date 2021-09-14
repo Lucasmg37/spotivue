@@ -89,7 +89,11 @@ export default {
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding: 0 48px;
+    padding: 0 16px;
+
+    @include md {
+      padding-left: 48px;
+    }
 
     h2 {
       margin-right: auto;
@@ -100,6 +104,11 @@ export default {
     button {
       color: #fff;
       padding: 16px;
+      display: none;
+
+      @include md {
+        display: block;
+      }
 
       &:disabled {
         opacity: 0.5;
@@ -109,7 +118,11 @@ export default {
 
   .content {
     overflow: auto;
-    padding-left: 48px;
+    padding-left: 16px;
+
+    @include md {
+      padding-left: 48px;
+    }
 
     &::-webkit-scrollbar {
       width: 0px;

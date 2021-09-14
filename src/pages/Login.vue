@@ -84,6 +84,7 @@ export default Login;
   background-size: 400% 400%;
   height: 100%;
   width: 100%;
+  padding: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,6 +148,11 @@ export default Login;
     flex: 1;
     max-width: 900px;
     position: relative;
+    display: none;
+
+    @include md {
+      display: flex;
+    }
 
     img {
       width: 100%;

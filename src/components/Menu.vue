@@ -60,12 +60,16 @@ export default {
 
 <style lang="scss">
 #menuContainerComponent {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   background: #2d2d3f;
   padding: 24px 16px;
+
+  @include md {
+    display: flex;
+  }
 
   div:nth-child(1) {
     color: #fff;
