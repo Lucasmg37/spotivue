@@ -9,7 +9,7 @@ import { mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'App',
-  data: function() {
+  data: function () {
     return {
       loading: true,
     };
@@ -24,9 +24,9 @@ export default {
       const data = await this.userInit();
       this.setAccessToken(data);
 
-      if (['/login', '/'].includes(this.$route.path) && data) {
+      if (['/login', '/', '/auth'].includes(this.$route.path) && data) {
         this.$router.push('/app/');
-      } else if (!data) {
+      } else if (!data && this.$route.path !== '/auth') {
         this.$router.push('/login');
       }
     };

@@ -1,5 +1,6 @@
 
 import Login from '../pages/Login.vue';
+import Auth from '../pages/Auth.vue';
 import Player from '../pages/Player.vue';
 import Home from '../pages/Home.vue';
 import Playlist from '../pages/Playlist.vue';
@@ -13,6 +14,7 @@ import Wrapper from '../layout/Wrapper.vue';
 const routes = [
   { path: '/', component: Player },
   { path: '/login', component: Login },
+  { path: '/auth', component: Auth },
   {
     path: '/app', component: Wrapper, children: [
       { path: 'playlist', component: Playlists },

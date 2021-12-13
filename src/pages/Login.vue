@@ -3,9 +3,7 @@
     <div>
       <h1>Um novo conceito para o <span>Spotify.</span></h1>
 
-      <p>
-        Uma interface diferente para você que ama ouvir músicas no Spotify.
-      </p>
+      <p>Uma interface diferente para você que ama ouvir músicas no Spotify.</p>
 
       <small>Somente para contas Premium. <button>Saiba mais</button> </small>
 
@@ -25,7 +23,6 @@
 <script>
 import { PhSpotifyLogo } from 'phosphor-vue';
 import { mapMutations } from 'vuex';
-import PopupWindow from '../utils/PopUp';
 import { toQuery } from '../utils/urlUtils';
 
 const Login = {
@@ -34,27 +31,15 @@ const Login = {
   methods: {
     ...mapMutations('spotify', ['setAccessToken']),
     ...mapMutations('user', ['setAccessTokenUser']),
-    auth: function() {
+    auth: function () {
       const search = toQuery({
         client_id: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
         scope: process.env.VUE_APP_SPOTIFY_SCOPES,
         redirect_uri: process.env.VUE_APP_SPOTIFY_REDIRECT_URL,
         response_type: 'token',
       });
-      const popup = PopupWindow.open(
-        'spotify-authorization',
-        `https://accounts.spotify.com/authorize?${search}`,
-        { height: 700, width: 600 },
-      );
 
-      popup.then(
-        data => {
-          this.setAccessToken(data.access_token);
-          this.setAccessTokenUser(data.access_token);
-          this.$router.push('/app/');
-        },
-        error => console.log(error),
-      );
+      window.location.href = `https://accounts.spotify.com/authorize?${search}`;
     },
   },
 };
