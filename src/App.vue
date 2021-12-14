@@ -24,7 +24,7 @@ export default {
       const data = await this.userInit();
       this.setAccessToken(data);
 
-      if (['/login', '/', '/auth'].includes(this.$route.path) && data) {
+      if (['/login', '/'].includes(this.$route.path) && data) {
         this.$router.push('/app/');
       } else if (!data && this.$route.path !== '/auth') {
         this.$router.push('/login');
