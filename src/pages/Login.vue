@@ -22,15 +22,12 @@
 
 <script>
 import { PhSpotifyLogo } from 'phosphor-vue';
-import { mapMutations } from 'vuex';
 import { toQuery } from '../utils/urlUtils';
 
 const Login = {
   name: 'Login',
   components: { PhSpotifyLogo },
   methods: {
-    ...mapMutations('spotify', ['setAccessToken']),
-    ...mapMutations('user', ['setAccessTokenUser']),
     auth: function () {
       const search = toQuery({
         client_id: process.env.VUE_APP_SPOTIFY_CLIENT_ID,

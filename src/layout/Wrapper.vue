@@ -37,8 +37,10 @@ export default {
     ]),
     ...mapMutations('user', ['signOut']),
     ...mapMutations('spotify', ['setSavedTracks']),
-    initWrapper: async function() {
+    initWrapper: async function () {
       if (this.accessToken) {
+        console.log('initWrapper');
+
         new Promise(() => {
           if (window.Spotify) {
             this.playerInit();
@@ -46,6 +48,8 @@ export default {
             window.onSpotifyWebPlaybackSDKReady = this.playerInit;
           }
         });
+
+        console.log('initWrapper2');
 
         this.getMePlayerAction();
         this.getAllLikedTracks();

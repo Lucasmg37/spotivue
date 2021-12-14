@@ -16,13 +16,14 @@ export default {
   },
   methods: {
     ...mapActions('user', ['userInit']),
-    ...mapActions('spotify', ['playerInit']),
     ...mapMutations('spotify', ['setAccessToken']),
   },
   created() {
     const init = async () => {
       const data = await this.userInit();
-      this.setAccessToken(data);
+      if (data) {
+        this.setAccessToken(data);
+      }
 
       if (['/login', '/'].includes(this.$route.path) && data) {
         this.$router.push('/app/');

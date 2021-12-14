@@ -9,7 +9,9 @@ const getters = {
 const actions = {
   userInit({ commit }) {
     const accessToken = localStorage.getItem('@SPOTIVUE:at')
-    commit('setAccessTokenUser', accessToken)
+    if (accessToken) {
+      commit('setAccessTokenUser', accessToken)
+    }
     return accessToken;
   },
 }

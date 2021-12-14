@@ -24,9 +24,12 @@ export default {
       return;
     }
 
-    this.setAccessToken(params.access_token);
     this.setAccessTokenUser(params.access_token);
-    this.$router.push('/app/');
+    this.setAccessToken(params.access_token);
+
+    setTimeout(() => {
+      this.$router.push('/app/');
+    }, 2000);
   },
 };
 </script>
