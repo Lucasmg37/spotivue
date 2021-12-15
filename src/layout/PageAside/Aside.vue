@@ -63,16 +63,27 @@ export default {
 
 <style lang="scss" scoped>
 #asidePageContainer {
-  min-width: 400px;
-  max-width: 400px;
   position: relative;
-  position: sticky;
   top: 0;
   display: flex;
-  padding: 48px;
+  padding: 16px 24px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  width: 100%;
+  flex-direction: column-reverse;
+  gap: 24px;
+  min-height: 300px;
+
+  @include md {
+    display: flex;
+    position: sticky;
+    min-width: 400px;
+    max-width: 400px;
+    flex-direction: row;
+    gap: 0px;
+    padding: 48px;
+  }
 
   .information {
     display: flex;
@@ -84,11 +95,20 @@ export default {
       border-radius: 16px;
       object-fit: cover;
       margin-bottom: 16px;
+      display: none;
+
+      @include md {
+        display: block;
+      }
     }
 
     h2 {
       font-weight: 600;
-      font-size: 32px;
+      font-size: 24px;
+
+      @include md {
+        font-size: 32px;
+      }
     }
 
     h3 {
@@ -105,6 +125,11 @@ export default {
       padding: 8px 24px;
       border-radius: 48px;
       transition: ease-in 0.2s all;
+      display: none;
+
+      @include md {
+        display: block;
+      }
 
       &:hover {
         background: #fff;
@@ -122,11 +147,14 @@ export default {
   }
 
   .options {
-    position: absolute;
-    left: calc(-56px / 2);
-    top: 100px;
     display: flex;
-    flex-direction: column;
+
+    @include md {
+      position: absolute;
+      left: calc(-56px / 2);
+      top: 100px;
+      flex-direction: column;
+    }
 
     button {
       transition: ease-in 0.2s all;
@@ -155,11 +183,18 @@ export default {
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: rgba($color: #ffffff, $alpha: 0.4);
-      border-radius: 0 0 36px 36px;
-      padding: 32px 0 16px 0;
-      margin: auto;
-      margin-top: -24px;
+      flex-direction: row;
+      padding: 0 0 0 32px;
+      margin-left: -24px;
+
+      @include md {
+        margin: auto;
+        margin-top: -24px;
+        padding: 32px 0 16px 0;
+        flex-direction: column;
+        border-radius: 0 0 36px 36px;
+        background: rgba($color: #ffffff, $alpha: 0.4);
+      }
 
       button {
         color: #fff;

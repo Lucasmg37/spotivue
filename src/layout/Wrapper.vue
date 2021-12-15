@@ -39,8 +39,6 @@ export default {
     ...mapMutations('spotify', ['setSavedTracks']),
     initWrapper: async function () {
       if (this.accessToken) {
-        console.log('initWrapper');
-
         new Promise(() => {
           if (window.Spotify) {
             this.playerInit();
@@ -48,8 +46,6 @@ export default {
             window.onSpotifyWebPlaybackSDKReady = this.playerInit;
           }
         });
-
-        console.log('initWrapper2');
 
         this.getMePlayerAction();
         this.getAllLikedTracks();
@@ -80,6 +76,12 @@ export default {
   display: flex;
   background: #08081a;
   overflow: hidden;
+
+  flex-direction: column-reverse;
+
+  @include md {
+    flex-direction: row;
+  }
 
   > main {
     flex: 1;

@@ -160,10 +160,9 @@
       :showFollowButton="true"
       :isFollowing="isFollowing"
       :onClickFollow="followArtist"
-      :subTitle="
-        `${artist.followers &&
-          getFormattedFollowers(artist.followers.total)} seguidores`
-      "
+      :subTitle="`${
+        artist.followers && getFormattedFollowers(artist.followers.total)
+      } seguidores`"
       :options="[
         {
           name: 'random',
@@ -190,20 +189,20 @@ export default {
   name: 'Artist',
   components: { Page, Aside, Track, Card, Carousel },
   watch: {
-    accessToken: function() {
+    accessToken: function () {
       this.init();
     },
-    $route: function() {
+    $route: function () {
       this.init();
     },
-    followingArtists: function() {
+    followingArtists: function () {
       this.verifiedIfFollowing();
     },
   },
-  created: function() {
+  created: function () {
     this.init();
   },
-  data: function() {
+  data: function () {
     return {
       artist: {},
       popularTracks: [],
@@ -229,21 +228,21 @@ export default {
     ...mapMutations('spotify', ['addFollowArtist', 'removeFollowArtist']),
     playerPlay: SpotifyApi.playerPlay,
     playArtists: SpotifyApi.playArtists,
-    playArtistRandom: async function() {
+    playArtistRandom: async function () {
       await SpotifyApi.playArtists(this.artist.uri);
       SpotifyApi.toogleShuffle(true);
     },
     getFormattedFollowers,
-    verifiedIfFollowing: function() {
+    verifiedIfFollowing: function () {
       this.isFollowing = !!this.followingArtists.filter(
         item => item.id === this.$route.params.id,
       ).length;
     },
-    changeMenu: function(menu) {
+    changeMenu: function (menu) {
       this.activeMenu = menu;
     },
 
-    followArtist: async function() {
+    followArtist: async function () {
       if (!this.isFollowing) {
         await SpotifyApi.followArtist('artist', [this.$route.params.id]);
         this.addFollowArtist({ id: this.$route.params.id });
@@ -252,7 +251,7 @@ export default {
         this.removeFollowArtist(this.$route.params.id);
       }
     },
-    init: async function() {
+    init: async function () {
       const pageScroll = document.getElementById('pageAsideContainer');
       pageScroll && pageScroll.scrollTo(0, 0);
 
@@ -303,9 +302,16 @@ export default {
   padding: 48px 0;
 
   nav {
-    margin-bottom: 40px;
+    margin-bottom: 8px;
     min-height: 80px;
-    padding: 0 48px;
+    padding: 0 16px;
+    max-width: 100%;
+    overflow: auto;
+
+    @include md {
+      padding: 0 48px;
+      margin-bottom: 40px;
+    }
 
     ul {
       display: flex;
@@ -316,14 +322,22 @@ export default {
         button {
           color: #fff;
           font-weight: 400;
-          font-size: 24px;
+          font-size: 20px;
           opacity: 0.7;
           transition: ease-in 0.2s all;
 
+          @include md {
+            font-size: 24px;
+          }
+
           &.active {
-            font-size: 40px;
+            font-size: 32px;
             opacity: 1;
             font-weight: 800;
+
+            @include md {
+              font-size: 40px;
+            }
           }
           &:hover {
             opacity: 1;
@@ -334,26 +348,44 @@ export default {
   }
 
   h2 {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     opacity: 0.7;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     display: inline-flex;
+
+    @include md {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
   }
 
   section {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+
+    @include md {
+      margin-bottom: 40px;
+    }
   }
 
   .grid {
     display: grid;
     grid-gap: 16px;
-    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
-    padding: 0 48px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    padding: 0 16px;
+
+    @include md {
+      padding: 0 48px;
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    }
   }
 
   .sectionPopular {
-    padding: 0 48px;
+    padding: 0 16px;
+
+    @include md {
+      padding: 0 48px;
+    }
   }
 
   .sectionRelated,
@@ -361,11 +393,18 @@ export default {
   .sectionAppersOn,
   .sectionSingle {
     h2 {
-      padding-left: 48px;
+      padding-left: 16px;
+      margin-bottom: 0px;
+
+      @include md {
+        padding-left: 48px;
+      }
     }
 
     #carouselComponentContainer {
-      margin-top: -80px;
+      @include md {
+        margin-top: -80px;
+      }
     }
   }
 }

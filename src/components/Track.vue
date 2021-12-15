@@ -7,7 +7,7 @@
     <div>
       {{ index }}
       <span>
-        <span><PhPlay size="16" weight="fill"/></span>
+        <span><PhPlay size="16" weight="fill" /></span>
       </span>
     </div>
     <div>{{ trackName }}</div>
@@ -42,16 +42,23 @@ export default {
 <style lang="scss" scoped>
 #trackComponentContainer {
   display: flex;
-  align-items: center;
   cursor: pointer;
   transition: ease 0.2s all;
-  padding: 32px;
+  padding: 8px 0px 8px 24px;
   border-radius: 8px;
   position: relative;
   width: 100%;
   overflow: hidden;
-  gap: 16px;
+  gap: 8px;
   color: rgba($color: #ffffff, $alpha: 0.6);
+  flex-direction: column;
+
+  @include md {
+    padding: 32px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
 
   &.active {
     background: #010c17;
@@ -66,8 +73,13 @@ export default {
       display: block;
       background: #1ed760;
       height: 100%;
-      width: 16px;
+      width: 8px;
       left: 0;
+      top: 0;
+
+      @include md {
+        width: 16px;
+      }
     }
   }
 
@@ -77,6 +89,11 @@ export default {
     max-width: 48px;
     position: relative;
     transition: ease 0.2s all;
+    display: none;
+
+    @include md {
+      display: block;
+    }
 
     span {
       position: absolute;
@@ -106,15 +123,37 @@ export default {
   > div:nth-child(2) {
     color: rgba($color: #ffffff, $alpha: 1);
     font-weight: 500;
+    font-size: 18px;
+
+    @include md {
+      font-size: 18px;
+    }
+  }
+
+  > div:nth-child(4) {
+    display: none;
+
+    @include md {
+      display: block;
+    }
   }
 
   > div:nth-child(5) {
     min-width: 56px;
     max-width: 56px;
+    display: none;
+
+    @include md {
+      display: block;
+    }
   }
 
   & + & {
-    padding: calc(32px + 2px) 32px 32px;
+    padding: 16px 0px 16px 24px;
+
+    @include md {
+      padding: calc(32px + 2px) 32px 32px;
+    }
 
     ::before {
       content: '';

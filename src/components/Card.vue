@@ -36,19 +36,26 @@ export default {
 
 <style lang="scss" scoped>
 #cardComponentContainer {
-  padding: 24px;
+  padding: 16px;
   border-radius: 16px;
   background: #0e0e20;
   display: flex;
   flex-direction: column;
-  max-width: 248px;
-  min-width: 248px;
-  height: 350px;
+  max-width: 180px;
+  min-width: 180px;
+  height: 280px;
   align-items: center;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   color: #fff;
+
+  @include md {
+    max-width: 248px;
+    min-width: 248px;
+    height: 350px;
+    padding: 24px;
+  }
 
   &.isPlaying {
     border: rgba(29, 185, 84, 0.8) 2px solid;
@@ -103,27 +110,40 @@ export default {
   }
 
   h2 {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
     text-align: center;
     margin-top: auto;
+
+    @include md {
+      font-size: 18px;
+    }
   }
 
   h3 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 300;
     text-align: center;
     margin-bottom: auto;
     margin-top: 8px;
     opacity: 0.7;
+
+    @include md {
+      font-size: 16px;
+    }
   }
 
   img {
-    width: 200px;
-    height: 200px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
     border-radius: 16px;
     margin-bottom: 8px;
+
+    @include md {
+      width: 200px;
+      height: 200px;
+    }
 
     &.rouded {
       border-radius: 50%;

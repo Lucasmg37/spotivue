@@ -25,14 +25,14 @@ export default {
   name: 'Carousel',
   props: { title: String },
   components: { PhCaretLeft, PhCaretRight },
-  data: function() {
+  data: function () {
     return {
       begin: true,
       end: false,
     };
   },
   methods: {
-    next: function() {
+    next: function () {
       const secureWidth = 300;
       const widthScreen = this.$refs.carouselRef.clientWidth;
       const leftScrool = this.$refs.carouselRef.scrollLeft;
@@ -54,7 +54,7 @@ export default {
       });
     },
 
-    previous: function() {
+    previous: function () {
       const secureWidth = 300;
       const widthScreen = this.$refs.carouselRef.clientWidth;
       const leftScrool = this.$refs.carouselRef.scrollLeft;
@@ -89,7 +89,7 @@ export default {
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding: 0 16px;
+    padding: 8px 16px;
 
     @include md {
       padding-left: 48px;
@@ -99,6 +99,11 @@ export default {
       margin-right: auto;
       font-weight: 500;
       opacity: 0.8;
+      font-size: 18px;
+
+      @include md {
+        font-size: 24px;
+      }
     }
 
     button {

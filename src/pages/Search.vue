@@ -97,19 +97,19 @@ export default {
   name: 'Search',
   components: { Track, Card, PhArrowRight, PhXCircle },
   watch: {
-    accessToken: function() {
+    accessToken: function () {
       this.init();
     },
-    activeMenu: function() {
+    activeMenu: function () {
       this.results = [];
       this.handleSearchPage(1);
       this.page = 1;
     },
   },
-  created: function() {
+  created: function () {
     this.init();
   },
-  data: function() {
+  data: function () {
     return {
       related: [],
       menus: [
@@ -136,7 +136,7 @@ export default {
     playerPlay: SpotifyApi.playerPlay,
     playArtists: SpotifyApi.playArtists,
 
-    searchSpotify: async function(page = 1, limit = 20) {
+    searchSpotify: async function (page = 1, limit = 20) {
       const data = await SpotifyApi.search({
         q: this.search,
         type: this.activeMenu,
@@ -147,18 +147,18 @@ export default {
       return data;
     },
 
-    getAttrName: function(menu) {
+    getAttrName: function (menu) {
       return this.menus.filter(item => item.searchTerm === menu)[0].attr;
     },
 
-    handleSearch: async function(event) {
+    handleSearch: async function (event) {
       event.preventDefault();
       const data = await this.searchSpotify(1);
       this.results = data[this.getAttrName(this.activeMenu)].items;
       this.page = 1;
     },
 
-    handleSearchPage: async function(page) {
+    handleSearchPage: async function (page) {
       const data = await this.searchSpotify(page);
       this.results = [
         ...this.results,
@@ -166,14 +166,14 @@ export default {
       ];
       this.page = page;
     },
-    clearSearch: function() {
+    clearSearch: function () {
       this.search = '';
       this.page = 1;
     },
-    changeMenu: function(menu) {
+    changeMenu: function (menu) {
       this.activeMenu = menu;
     },
-    init: async function() {
+    init: async function () {
       this.activeMenu = 'track';
     },
   },
@@ -182,11 +182,17 @@ export default {
 
 <style lang="scss" scoped>
 #searchContainer {
-  padding: 48px;
-  overflow: auto;
+  padding: 48px 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   flex: 1;
+  max-width: 100%;
+
+  @include md {
+    padding: 48px;
+  }
 
   .searchInput {
     display: flex;
@@ -214,7 +220,11 @@ export default {
       border: none;
       background: none;
       color: #fff;
-      font-size: 32px;
+      font-size: 16px;
+
+      @include md {
+        font-size: 32px;
+      }
 
       &:focus,
       &:active {
@@ -236,14 +246,22 @@ export default {
         button {
           color: #fff;
           font-weight: 400;
-          font-size: 24px;
+          font-size: 18px;
           opacity: 0.7;
           transition: ease-in 0.2s all;
 
+          @include md {
+            font-size: 24px;
+          }
+
           &.active {
-            font-size: 40px;
+            font-size: 32px;
             opacity: 1;
             font-weight: 800;
+
+            @include md {
+              font-size: 40px;
+            }
           }
           &:hover {
             opacity: 1;
@@ -256,7 +274,11 @@ export default {
   .grid {
     display: grid;
     grid-gap: 16px;
-    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+    @include md {
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    }
   }
 }
 </style>

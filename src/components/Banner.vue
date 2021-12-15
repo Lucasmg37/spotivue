@@ -42,23 +42,30 @@ export default {
 
 <style lang="scss" scoped>
 #bannerComponentContainer {
-  border-radius: 16px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  min-width: 500px;
-  height: 300px;
+  max-width: 300px;
+  min-width: 300px;
+  height: 240px;
   align-items: center;
   position: relative;
   overflow: hidden;
   opacity: 0.9;
   transition: ease-in 0.2s all;
 
+  @include md {
+    max-width: 500px;
+    min-width: 500px;
+    height: 300px;
+    border-radius: 16px;
+  }
+
   .info {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 32px;
+    padding: 16px;
     background: linear-gradient(
       50deg,
       rgba(14, 14, 32, 0.8) 0%,
@@ -69,6 +76,10 @@ export default {
     background-position: 0% 50%;
     display: flex;
     transition: ease-in all 0.2s;
+
+    @include md {
+      padding: 32px;
+    }
 
     &:hover {
       background-position: 100% 50%;
@@ -83,23 +94,33 @@ export default {
 
     > div {
       display: flex;
-      align-items: center;
       margin-top: auto;
+      flex-direction: column;
+      gap: 8px;
+
+      @include md {
+        flex-direction: row;
+        align-items: center;
+        gap: 0px;
+      }
 
       > div:first-child {
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-right: 16px;
-        opacity: 0;
-        max-width: 0px;
-        min-width: 0px;
-        overflow: hidden;
         transition: ease-in-out 0.5s all;
 
         &.isPlaying {
           opacity: 1;
           min-width: 112px;
+        }
+
+        @include md {
+          opacity: 0;
+          max-width: 0px;
+          min-width: 0px;
+          overflow: hidden;
+          margin-right: 16px;
         }
       }
 
@@ -152,8 +173,12 @@ export default {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 8px;
     margin-bottom: 8px;
+
+    @include md {
+      border-radius: 16px;
+    }
   }
 }
 </style>

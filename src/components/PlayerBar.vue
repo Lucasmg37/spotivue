@@ -1,7 +1,7 @@
 <template>
   <div id="playerBarContainer">
     <button
-      class="button button-heart"
+      class="button"
       @click="
         !isCurrentTrackSaved ? saveTrack(nowInfo.id) : removeTrack(nowInfo.id)
       "
@@ -75,8 +75,8 @@
         </button>
       </div>
     </div>
-    <button class="button"><ph-speaker-high size="24" /></button>
-    <button class="button"><ph-queue size="24" /></button>
+    <button class="button hide-mobile"><ph-speaker-high size="24" /></button>
+    <button class="button hide-mobile"><ph-queue size="24" /></button>
   </div>
 </template>
 
@@ -98,7 +98,7 @@ import SpotifyApi from '../services/SpotifyApi';
 
 export default {
   name: 'PlayerBar',
-  data: function() {
+  data: function () {
     return {
       interval: null,
     };
@@ -120,11 +120,11 @@ export default {
       'removeSavedTracks',
     ]),
     ...mapActions('spotify', ['updateProgress']),
-    saveTrack: async function(id) {
+    saveTrack: async function (id) {
       await SpotifyApi.saveTrack(id);
       this.addSavedTracks({ track: { id } });
     },
-    removeTrack: async function(id) {
+    removeTrack: async function (id) {
       this.removeSavedTracks(id);
     },
     nextTrack() {
@@ -133,15 +133,15 @@ export default {
     previousTrack() {
       this.player.previousTrack();
     },
-    resume: function() {
+    resume: function () {
       this.player.resume();
       this.setPlaying(true);
     },
-    pause: function() {
+    pause: function () {
       this.player.pause();
       this.setPlaying(false);
     },
-    changeRepeat: function() {
+    changeRepeat: function () {
       if (this.nowInfo.repeatMode === 0) {
         SpotifyApi.setRepeatMode('context');
       } else if (this.nowInfo.repeatMode === 1) {
@@ -180,13 +180,37 @@ export default {
 #playerBarContainer {
   display: flex;
   min-height: 100px;
-  background: #fff;
-  width: 100%;
   margin-top: auto;
-  padding: 16px 32px;
+  padding: 8px 16px;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
+  overflow: hidden;
+  position: absolute;
+  width: calc(100% - 32px);
+  left: 16px;
+  border-radius: 8px;
+  bottom: 120px;
+  background: rgba(255, 253, 253, 0.9);
+
+  @include md {
+    position: relative;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 32px;
+    width: 100%;
+    left: auto;
+    border-radius: 0px;
+    bottom: auto;
+    background: #fff;
+  }
+
+  .hide-mobile {
+    display: none !important;
+
+    @include md {
+      display: flex;
+    }
+  }
 
   .active {
     background: #eee;
@@ -216,6 +240,11 @@ export default {
   .box-controls-bar {
     flex: 1;
     gap: 32px;
+    display: none;
+
+    @include md {
+      display: flex;
+    }
   }
 
   .box-seek-bar {
@@ -307,15 +336,24 @@ export default {
 
   .box-track-info {
     img {
-      widows: 60px;
-      height: 60px;
-      border-radius: 50%;
+      widows: 40px;
+      height: 40px;
+      border-radius: 4px;
       object-fit: cover;
       margin-right: 16px;
+
+      @include md {
+        widows: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
 
     div {
-      width: 300px;
+      @include md {
+        width: 300px;
+      }
 
       a {
         text-decoration: none;
@@ -325,15 +363,28 @@ export default {
       a:nth-child(1) {
         font-size: 12px;
         font-weight: 400;
+        display: none;
+
+        @include md {
+          display: inline;
+        }
       }
       p:nth-child(2) {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 500;
+
+        @include md {
+          font-size: 20px;
+        }
       }
 
       a:nth-child(3) {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 400;
+
+        @include md {
+          font-size: 16px;
+        }
       }
     }
   }

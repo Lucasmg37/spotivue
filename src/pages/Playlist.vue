@@ -64,7 +64,7 @@ const Playlist = {
       };
     },
   },
-  data: function() {
+  data: function () {
     return {
       tracks: [],
       playlist: {},
@@ -72,24 +72,24 @@ const Playlist = {
     };
   },
   watch: {
-    accessToken: function() {
+    accessToken: function () {
       this.init();
     },
-    $route: function() {
+    $route: function () {
       this.init();
     },
-    playlistsUser: function() {
+    playlistsUser: function () {
       this.verifiedIfFollowing();
     },
   },
   methods: {
     ...mapMutations('spotify', ['addSavedPlaylist', 'removeSavedPlaylist']),
-    verifiedIfFollowing: function() {
+    verifiedIfFollowing: function () {
       this.isFollowing = !!this.playlistsUser.filter(
         item => item.id === this.$route.params.id,
       ).length;
     },
-    savePlaylist: async function() {
+    savePlaylist: async function () {
       if (this.isFollowing) {
         SpotifyApi.unFollowPlaylist(this.$route.params.id);
         this.removeSavedPlaylist(this.$route.params.id);
@@ -98,12 +98,12 @@ const Playlist = {
         this.addSavedPlaylist(this.playlist);
       }
     },
-    playPlaylistRandom: async function() {
+    playPlaylistRandom: async function () {
       const position = Math.trunc(Math.random() * (this.tracks.length + 1));
       await SpotifyApi.playerPlay(this.playlist.uri, position);
       SpotifyApi.toogleShuffle(true);
     },
-    init: async function() {
+    init: async function () {
       if (this.accessToken) {
         this.verifiedIfFollowing();
 
@@ -115,7 +115,7 @@ const Playlist = {
         );
       }
     },
-    playTrack: function(position) {
+    playTrack: function (position) {
       SpotifyApi.playerPlay(this.playlist.uri, position);
     },
   },
@@ -126,6 +126,10 @@ export default Playlist;
 
 <style lang="scss" scoped>
 #playlistContent {
-  padding: 48px;
+  padding: 48px 16px;
+
+  @include md {
+    padding: 48px;
+  }
 }
 </style>

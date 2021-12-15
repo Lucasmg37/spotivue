@@ -47,17 +47,30 @@ export default Playlists;
   display: flex;
   flex-direction: column;
   overflow: auto;
-  padding: 48px;
+  padding: 48px 16px;
+
+  @include md {
+    padding: 48px;
+  }
 
   h1 {
-    font-size: 48px;
-    margin-bottom: 80px;
+    font-size: 32px;
+    margin-bottom: 32px;
+
+    @include md {
+      font-size: 48px;
+      margin-bottom: 80px;
+    }
   }
 
   > div {
     display: grid;
     grid-gap: 16px;
-    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+    @include md {
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    }
   }
 }
 </style>

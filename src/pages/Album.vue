@@ -88,20 +88,20 @@ export default {
   name: 'Album',
   components: { Page, Aside, Track, Card, Carousel },
   watch: {
-    accessToken: function() {
+    accessToken: function () {
       this.init();
     },
-    $route: function() {
+    $route: function () {
       this.init();
     },
-    savedAlbums: function() {
+    savedAlbums: function () {
       this.verifiedIfFollowing();
     },
   },
-  created: function() {
+  created: function () {
     this.init();
   },
-  data: function() {
+  data: function () {
     return {
       tracks: [],
       related: [],
@@ -123,12 +123,12 @@ export default {
     ...mapMutations('spotify', ['addSavedAlbums', 'removeSavedAlbums']),
     playerPlay: SpotifyApi.playerPlay,
     playArtists: SpotifyApi.playArtists,
-    verifiedIfFollowing: function() {
+    verifiedIfFollowing: function () {
       this.isFollowing = !!this.savedAlbums.filter(
         item => item.album.id === this.$route.params.id_album,
       ).length;
     },
-    saveAlbum: async function() {
+    saveAlbum: async function () {
       if (this.isFollowing) {
         SpotifyApi.removeAlbum([this.$route.params.id_album]);
         this.removeSavedAlbums(this.$route.params.id_album);
@@ -137,12 +137,12 @@ export default {
         this.addSavedAlbums({ album: this.album });
       }
     },
-    playAlbumRandom: async function() {
+    playAlbumRandom: async function () {
       const position = Math.trunc(Math.random() * (this.tracks.length + 1));
       await this.playerPlay(this.album.uri, position);
       SpotifyApi.toogleShuffle(true);
     },
-    init: async function() {
+    init: async function () {
       const pageScroll = document.getElementById('pageAsideContainer');
       pageScroll && pageScroll.scrollTo(0, 0);
 
@@ -187,67 +187,62 @@ export default {
 #artistContent {
   padding: 48px 0;
 
-  nav {
-    margin-bottom: 40px;
-    min-height: 80px;
-    padding: 0 48px;
+  h1 {
+    font-size: 24px;
+    margin-bottom: 32px;
+    padding: 0px 16px;
 
-    ul {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-
-      li {
-        button {
-          color: #fff;
-          font-weight: 400;
-          font-size: 24px;
-          opacity: 0.7;
-          transition: ease-in 0.2s all;
-
-          &.active {
-            font-size: 40px;
-            opacity: 1;
-            font-weight: 800;
-          }
-          &:hover {
-            opacity: 1;
-          }
-        }
-      }
+    @include md {
+      font-size: 48px;
+      margin-bottom: 80px;
+      padding: 0px 48px;
     }
   }
 
-  h1 {
-    font-size: 48px;
-    margin-bottom: 80px;
-    padding: 0px 48px;
-  }
-
   h2 {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     opacity: 0.7;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     display: inline-flex;
+
+    @include md {
+      margin-bottom: 24px;
+      font-size: 24px;
+    }
   }
 
   section {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+
+    @include md {
+      margin-bottom: 40px;
+    }
   }
 
   .sectionTracks {
-    padding: 0 48px;
+    padding: 0 16px;
+
+    @include md {
+      padding: 0 48px;
+    }
   }
 
   .sectionRelated,
   .sectionAlbum {
     h2 {
-      padding-left: 48px;
+      padding-left: 16px;
+      margin-bottom: 0px;
+
+      @include md {
+        padding-left: 48px;
+      }
     }
 
     #carouselComponentContainer {
-      margin-top: -80px;
+      @include md {
+        margin-top: -80px;
+      }
     }
   }
 }

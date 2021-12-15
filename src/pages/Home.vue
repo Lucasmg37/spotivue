@@ -10,9 +10,9 @@
           v-for="artist in relatedArtistsCurrent"
           :key="artist.id"
           :title="artist.name"
-          :subTitle="
-            `${getFormattedFollowers(artist.followers.total)} seguidores`
-          "
+          :subTitle="`${getFormattedFollowers(
+            artist.followers.total,
+          )} seguidores`"
           :image="artist.images[0] ? artist.images[0].url : artistImage"
           :isPlaying="contextPlayerUri === artist.uri"
           :onClickPlay="() => playArtists(artist.uri)"
@@ -103,16 +103,15 @@ import SpotifyApi from '../services/SpotifyApi';
 import { getFormattedFollowers } from '../utils/follow';
 import artistImage from '../assets/artist.jpg';
 
-
 const Home = {
   name: 'Home',
   components: { Card, Carousel, Banner },
-  data: function() {
+  data: function () {
     return {
       relatedArtistsCurrent: [],
       topTrackCurrentArtists: [],
       homeSections: [],
-      artistImage
+      artistImage,
     };
   },
   methods: {
@@ -124,14 +123,14 @@ const Home = {
     getFormattedFollowers,
     playerPlay: SpotifyApi.playerPlay,
     playArtists: SpotifyApi.playArtists,
-    init: async function() {
+    init: async function () {
       if (this.accessToken) {
         this.getTopTracks();
         this.getTopArtists();
         this.getAllPlaylists();
       }
     },
-    generateHomeData: async function() {
+    generateHomeData: async function () {
       if (this.artists.length) {
         const homeSectionsData = [];
         for (let index = 0; index <= 2; index++) {
@@ -143,7 +142,7 @@ const Home = {
         this.homeSections = homeSectionsData;
       }
     },
-    getCurrentData: async function() {
+    getCurrentData: async function () {
       if (this.idArtistCurrent && this.accessToken) {
         const { artists } = await SpotifyApi.getRelatedArtist(
           this.idArtistCurrent,
@@ -160,13 +159,13 @@ const Home = {
     },
   },
   watch: {
-    accessToken: function() {
+    accessToken: function () {
       this.init();
     },
-    idArtistCurrent: function() {
+    idArtistCurrent: function () {
       this.getCurrentData();
     },
-    artists: function() {
+    artists: function () {
       this.generateHomeData();
     },
   },
@@ -202,11 +201,12 @@ export default Home;
   padding: 48px 0;
 
   > h1 {
-    font-size: 48px;
+    font-size: 32px;
     padding: 0 16px;
 
     @include md {
       padding-left: 48px;
+      font-size: 48px;
     }
   }
 
