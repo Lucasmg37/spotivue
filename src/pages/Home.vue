@@ -227,10 +227,6 @@ export default Home;
 
     > div {
       margin-bottom: 56px;
-
-      > div + div {
-        margin-top: 32px;
-      }
     }
   }
 }
