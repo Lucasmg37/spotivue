@@ -1,17 +1,17 @@
 <template>
   <div id="authContainer">
-    <ph-spotify-logo weight="fill" size="56" />
+    <Loading />
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex';
 import { getParamsFromSpotifyCallback } from '../utils/spotifyCallback';
-import { PhSpotifyLogo } from 'phosphor-vue';
+import Loading from '../components/Loading';
 
 export default {
   name: 'Auth',
-  components: { PhSpotifyLogo },
+  components: { Loading },
   methods: {
     ...mapMutations('spotify', ['setAccessToken']),
     ...mapMutations('user', ['setAccessTokenUser']),
@@ -48,18 +48,6 @@ export default {
   }
 }
 
-@keyframes spotifyAnimate {
-  0% {
-    transform: scale(1.3);
-  }
-  50% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.3);
-  }
-}
-
 #authContainer {
   background: linear-gradient(
     50deg,
@@ -76,9 +64,5 @@ export default {
   color: #fff;
   gap: 24px;
   animation: bgAnimate 5s ease-in infinite;
-
-  > svg {
-    animation: spotifyAnimate 2s ease-in infinite;
-  }
 }
 </style>

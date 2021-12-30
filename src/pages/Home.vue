@@ -1,95 +1,101 @@
 <template>
   <div id="homeContainer">
-    <h1>Para você</h1>
-    <div>
-      <Carousel
-        v-if="relatedArtistsCurrent.length"
-        :title="`Combina com ${nowInfo.artistName}`"
-      >
-        <Banner
-          v-for="artist in relatedArtistsCurrent"
-          :key="artist.id"
-          :title="artist.name"
-          :subTitle="`${getFormattedFollowers(
-            artist.followers.total,
-          )} seguidores`"
-          :image="artist.images[0] ? artist.images[0].url : artistImage"
-          :isPlaying="contextPlayerUri === artist.uri"
-          :onClickPlay="() => playArtists(artist.uri)"
-          :linkRoute="`/app/artist/${artist.id}`"
-        />
-      </Carousel>
+    <div v-if="!tracks.length || !homeSections.length" class="loadingContainer">
+      <Loading />
     </div>
-    <div>
-      <Carousel
-        v-if="topTrackCurrentArtists.length"
-        :title="`As mais ouvidas de ${nowInfo.artistName}`"
-      >
-        <Card
-          v-for="track in topTrackCurrentArtists"
-          :key="track.id"
-          :title="track.name"
-          :subTitle="track.artists[0].name"
-          :image="track.album.images[0].url"
-          :isPlaying="track.id === nowInfo.id"
-          :onClickPlay="() => playerPlay(false, 0, [track.uri])"
-        />
-      </Carousel>
-      <Carousel title="Você não para de ouvir">
-        <Card
-          v-for="track in tracks"
-          :key="track.id"
-          :title="track.name"
-          :subTitle="track.artists[0].name"
-          :image="track.album.images[0].url"
-          :isPlaying="track.id === nowInfo.id"
-          :onClickPlay="() => playerPlay(false, 0, [track.uri])"
-        />
-      </Carousel>
-      <Carousel title="Seus preferidos">
-        <Card
-          v-for="artist in artists"
-          :key="artist.id"
-          :title="artist.name"
-          subTitle=""
-          :image="artist.images[0].url"
-          :isPlaying="contextPlayerUri === artist.uri"
-          :isImageRouded="true"
-          :onClickPlay="() => playArtists(artist.uri)"
-          :linkRoute="`/app/artist/${artist.id}`"
-        />
-      </Carousel>
 
-      <Carousel v-if="playlists.length" title="Algumas de suas Playlists">
-        <Banner
-          v-for="playlist in playlists"
-          :key="playlist.id"
-          :title="playlist.name"
-          :subTitle="`${playlist.tracks.total} Músicas`"
-          :image="playlist.images[0].url"
-          :isPlaying="contextPlayerUri === playlist.uri"
-          :onClickPlay="() => playArtists(playlist.uri)"
-          :linkRoute="`/app/playlist/${playlist.id}`"
-        />
-      </Carousel>
+    <div class="content" v-else>
+      <h1>Para você</h1>
+      <div>
+        <Carousel
+          v-if="relatedArtistsCurrent.length"
+          :title="`Combina com ${nowInfo.artistName}`"
+        >
+          <Banner
+            v-for="artist in relatedArtistsCurrent"
+            :key="artist.id"
+            :title="artist.name"
+            :subTitle="`${getFormattedFollowers(
+              artist.followers.total,
+            )} seguidores`"
+            :image="artist.images[0] ? artist.images[0].url : artistImage"
+            :isPlaying="contextPlayerUri === artist.uri"
+            :onClickPlay="() => playArtists(artist.uri)"
+            :linkRoute="`/app/artist/${artist.id}`"
+          />
+        </Carousel>
+      </div>
+      <div>
+        <Carousel
+          v-if="topTrackCurrentArtists.length"
+          :title="`As mais ouvidas de ${nowInfo.artistName}`"
+        >
+          <Card
+            v-for="track in topTrackCurrentArtists"
+            :key="track.id"
+            :title="track.name"
+            :subTitle="track.artists[0].name"
+            :image="track.album.images[0].url"
+            :isPlaying="track.id === nowInfo.id"
+            :onClickPlay="() => playerPlay(false, 0, [track.uri])"
+          />
+        </Carousel>
+        <Carousel title="Você não para de ouvir">
+          <Card
+            v-for="track in tracks"
+            :key="track.id"
+            :title="track.name"
+            :subTitle="track.artists[0].name"
+            :image="track.album.images[0].url"
+            :isPlaying="track.id === nowInfo.id"
+            :onClickPlay="() => playerPlay(false, 0, [track.uri])"
+          />
+        </Carousel>
+        <Carousel title="Seus preferidos">
+          <Card
+            v-for="artist in artists"
+            :key="artist.id"
+            :title="artist.name"
+            subTitle=""
+            :image="artist.images[0].url"
+            :isPlaying="contextPlayerUri === artist.uri"
+            :isImageRouded="true"
+            :onClickPlay="() => playArtists(artist.uri)"
+            :linkRoute="`/app/artist/${artist.id}`"
+          />
+        </Carousel>
 
-      <Carousel
-        v-for="homeSection in homeSections"
-        :key="homeSection.artist.id"
-        :title="`Porque você ouve ${homeSection.artist.name}`"
-      >
-        <Card
-          v-for="artist in homeSection.artists"
-          :key="artist.id"
-          :title="artist.name"
-          subTitle=""
-          :image="artist.images[0].url"
-          :isPlaying="contextPlayerUri === artist.uri"
-          :isImageRouded="true"
-          :onClickPlay="() => playArtists(artist.uri)"
-          :linkRoute="`/app/artist/${artist.id}`"
-        />
-      </Carousel>
+        <Carousel v-if="playlists.length" title="Algumas de suas Playlists">
+          <Banner
+            v-for="playlist in playlists"
+            :key="playlist.id"
+            :title="playlist.name"
+            :subTitle="`${playlist.tracks.total} Músicas`"
+            :image="playlist.images[0].url"
+            :isPlaying="contextPlayerUri === playlist.uri"
+            :onClickPlay="() => playArtists(playlist.uri)"
+            :linkRoute="`/app/playlist/${playlist.id}`"
+          />
+        </Carousel>
+
+        <Carousel
+          v-for="homeSection in homeSections"
+          :key="homeSection.artist.id"
+          :title="`Porque você ouve ${homeSection.artist.name}`"
+        >
+          <Card
+            v-for="artist in homeSection.artists"
+            :key="artist.id"
+            :title="artist.name"
+            subTitle=""
+            :image="artist.images[0].url"
+            :isPlaying="contextPlayerUri === artist.uri"
+            :isImageRouded="true"
+            :onClickPlay="() => playArtists(artist.uri)"
+            :linkRoute="`/app/artist/${artist.id}`"
+          />
+        </Carousel>
+      </div>
     </div>
   </div>
 </template>
@@ -99,13 +105,14 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 import Card from '../components/Card.vue';
 import Banner from '../components/Banner.vue';
 import Carousel from '../components/Carousel.vue';
+import Loading from '../components/Loading.vue';
 import SpotifyApi from '../services/SpotifyApi';
 import { getFormattedFollowers } from '../utils/follow';
 import artistImage from '../assets/artist.jpg';
 
 const Home = {
   name: 'Home',
-  components: { Card, Carousel, Banner },
+  components: { Card, Carousel, Banner, Loading },
   data: function () {
     return {
       relatedArtistsCurrent: [],
@@ -200,21 +207,30 @@ export default Home;
   overflow: auto;
   padding: 48px 0;
 
-  > h1 {
-    font-size: 32px;
-    padding: 0 16px;
-
-    @include md {
-      padding-left: 48px;
-      font-size: 48px;
-    }
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 
-  > div {
-    margin-bottom: 56px;
+  .content {
+    > h1 {
+      font-size: 32px;
+      padding: 0 16px;
 
-    > div + div {
-      margin-top: 32px;
+      @include md {
+        padding-left: 48px;
+        font-size: 48px;
+      }
+    }
+
+    > div {
+      margin-bottom: 56px;
+
+      > div + div {
+        margin-top: 32px;
+      }
     }
   }
 }
