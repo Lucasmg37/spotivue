@@ -14,6 +14,11 @@ export default class SpotifyApi {
     return data
   }
 
+  static async getMe() {
+    const { data } = await api.get('me');
+    return data
+  }
+
   static async transferUserPlayback(device_id) {
     const { data } = await api.put('me/player', { device_ids: [device_id], play: true });
     return data

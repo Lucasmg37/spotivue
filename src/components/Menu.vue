@@ -15,7 +15,10 @@
       <router-link to="/app/about"><ph-github-logo size="32" /></router-link>
     </div>
     <div>
-      <ph-spotify-logo weight="fill" size="32" />
+      <img v-if="user.id && user.images[0]" :src="user.images[0].url" alt="" />
+      <div v-if="user.id && !user.images[0]">
+        {{ user.display_name.substring(0, 1).toUpperCase() }}
+      </div>
     </div>
   </aside>
 </template>
@@ -46,6 +49,7 @@ export default {
     ...mapState({
       accessToken: ({ spotify }) => spotify.accessToken,
       device: ({ spotify }) => spotify.device,
+      user: ({ spotify }) => spotify.user,
     }),
   },
   methods: {
@@ -89,6 +93,22 @@ export default {
 
     @include md {
       display: block;
+
+      img,
+      div {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        object-fit: cover;
+        font-weight: 600;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2d2d3f;
+        background: #fff;
+      }
     }
   }
 

@@ -2,6 +2,7 @@
   <div id="wrapperContainer">
     <Menu></Menu>
     <main>
+      <Modal v-if="showModal" :onClose="onCloseModal" />
       <router-view></router-view>
       <PlayerBar v-if="playerActive"></PlayerBar>
     </main>
@@ -12,24 +13,37 @@
 import { mapActions, mapMutations, mapState } from 'vuex';
 import Menu from '../components/Menu.vue';
 import PlayerBar from '../components/PlayerBar.vue';
+import Modal from '../components/Modal.vue';
 
 export default {
   name: 'Wrapper',
-  components: { Menu, PlayerBar },
+  components: { Menu, PlayerBar, Modal },
   computed: {
     ...mapState({
       authError: ({ spotify }) => spotify.authError,
       accessToken: ({ spotify }) => spotify.accessToken,
       playerActive: ({ spotify }) => spotify.playerActive,
+      user: ({ spotify }) => spotify.user,
     }),
   },
   created() {
     this.initWrapper();
   },
+  data() {
+    return {
+      isNotPremiumOk: localStorage.getItem('premiumInfoOk') === '1',
+      showModal: false,
+    };
+  },
   methods: {
+    onCloseModal() {
+      this.showModal = false;
+      localStorage.setItem('premiumInfoOk', '1');
+    },
     ...mapActions('spotify', [
       'playerInit',
       'getMePlayerAction',
+      'getMeAction',
       'getAllLikedTracks',
       'getAllFollowingArtists',
       'getAllSavedAlbums',
@@ -47,6 +61,7 @@ export default {
           }
         });
 
+        this.getMeAction();
         this.getMePlayerAction();
         this.getAllLikedTracks();
         this.getAllFollowingArtists();
@@ -58,6 +73,13 @@ export default {
   watch: {
     accessToken() {
       this.initWrapper();
+    },
+    user(user) {
+      if (user.id) {
+        if (user.product !== 'premium' && !this.isNotPremiumOk) {
+          this.showModal = true;
+        }
+      }
     },
     authError(status) {
       if (status) {
@@ -88,6 +110,7 @@ export default {
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+    position: relative;
   }
 }
 </style>

@@ -1,17 +1,23 @@
 <template>
   <Page>
     <main id="playlistContent">
-      <Track
-        v-for="(track, index) in tracks"
-        :key="track.track.id"
-        :index="index + 1"
-        :onPlay="() => playTrack(index)"
-        :isPlaying="track.track.id === nowInfo.id"
-        :trackName="track.track.name"
-        :albumName="track.track.album.name"
-        :artistName="track.track.artists[0].name"
-        :trackDuration="track.track.duration_ms"
-      ></Track>
+      <div v-if="isLoading" class="loadingContainer">
+        <Loading />
+      </div>
+
+      <div v-else class="content">
+        <Track
+          v-for="(track, index) in tracks"
+          :key="track.track.id"
+          :index="index + 1"
+          :onPlay="() => playTrack(index)"
+          :isPlaying="track.track.id === nowInfo.id"
+          :trackName="track.track.name"
+          :albumName="track.track.album.name"
+          :artistName="track.track.artists[0].name"
+          :trackDuration="track.track.duration_ms"
+        ></Track>
+      </div>
     </main>
     <Aside
       :image="playlist.images && playlist.images[0].url"
@@ -38,6 +44,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex';
 import SpotifyApi from '../services/SpotifyApi';
 import Track from '../components/Track.vue';
+import Loading from '../components/Loading.vue';
 import Page from '../layout/PageAside/Page.vue';
 import Aside from '../layout/PageAside/Aside.vue';
 import { PhPlay, PhHeart } from 'phosphor-vue';
@@ -45,7 +52,7 @@ import { getAllForPaginator } from '../utils/spotifyRequests';
 
 const Playlist = {
   name: 'Playlist',
-  components: { Track, PhPlay, PhHeart, Page, Aside },
+  components: { Track, PhPlay, PhHeart, Page, Aside, Loading },
   created() {
     this.init();
   },
@@ -69,6 +76,7 @@ const Playlist = {
       tracks: [],
       playlist: {},
       isFollowing: false,
+      isLoading: true,
     };
   },
   watch: {
@@ -113,6 +121,8 @@ const Playlist = {
           {},
           { playlistId: this.$route.params.id },
         );
+
+        this.isLoading = false;
       }
     },
     playTrack: function (position) {
@@ -126,10 +136,18 @@ export default Playlist;
 
 <style lang="scss" scoped>
 #playlistContent {
-  padding: 48px 16px;
+  .content {
+    padding: 48px 16px;
+    @include md {
+      padding: 48px;
+    }
+  }
 
-  @include md {
-    padding: 48px;
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 }
 </style>

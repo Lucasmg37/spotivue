@@ -1,61 +1,74 @@
 <template>
   <Page>
     <main id="artistContent">
-      <h1>Neste álbum</h1>
+      <div v-if="isLoading" class="loadingContainer">
+        <Loading />
+      </div>
 
-      <section v-if="tracks.length" class="sectionTracks">
-        <Track
-          v-for="(track, index) in tracks"
-          :key="track.id"
-          :index="track.track_number"
-          :onPlay="() => playerPlay(album.uri, index)"
-          :isPlaying="
-            track.id === nowInfo.id || track.id === nowInfo.likedFromId
-          "
-          :trackName="track.name"
-          :albumName="album.name"
-          :artistName="track.artists[0].name"
-          :trackDuration="track.duration_ms"
-        />
-      </section>
+      <div class="content" v-else>
+        <h1>Neste álbum</h1>
+        <p>
+          Ver
+          <router-link :to="'/app/artist/' + album.artists[0].id">
+            <a>{{ album.artists && album.artists[0].name }} <ph-link /></a>
+          </router-link>
+        </p>
 
-      <section v-if="albums.length" class="sectionAlbum">
-        <h2>Outros álbums</h2>
-        <Carousel>
-          <Card
-            v-for="album in albums.slice(0, 10)"
-            :key="album.id"
-            :title="album.name"
-            subTitle=""
-            :image="album.images[0] ? album.images[0].url : artistImage"
-            :isPlaying="contextPlayerUri === album.uri"
-            :isImageRouded="true"
-            :onClickPlay="() => playArtists(album.uri)"
-            :linkRoute="`/app/artist/${$route.params.id}/album/${album.id}`"
+        <section v-if="tracks.length" class="sectionTracks">
+          <Track
+            v-for="(track, index) in tracks"
+            :key="track.id"
+            :index="track.track_number"
+            :onPlay="() => playerPlay(album.uri, index)"
+            :isPlaying="
+              track.id === nowInfo.id || track.id === nowInfo.likedFromId
+            "
+            :trackName="track.name"
+            :albumName="album.name"
+            :artistName="track.artists[0].name"
+            :trackDuration="track.duration_ms"
           />
-        </Carousel>
-      </section>
-      <section v-if="related.length" class="sectionRelated">
-        <h2>Relacionados</h2>
-        <Carousel>
-          <Card
-            v-for="artist in related.slice(0, 10)"
-            :key="artist.id"
-            :title="artist.name"
-            subTitle=""
-            :image="artist.images[0] ? artist.images[0].url : artistImage"
-            :isPlaying="contextPlayerUri === artist.uri"
-            :isImageRouded="true"
-            :onClickPlay="() => playArtists(artist.uri)"
-            :linkRoute="`/app/artist/${artist.id}`"
-          />
-        </Carousel>
-      </section>
+        </section>
+
+        <section v-if="albums.length" class="sectionAlbum">
+          <h2>Outros álbums</h2>
+          <Carousel>
+            <Card
+              v-for="album in albums.slice(0, 10)"
+              :key="album.id"
+              :title="album.name"
+              :subTitle="album.artists[0].name"
+              :image="album.images[0] ? album.images[0].url : artistImage"
+              :isPlaying="contextPlayerUri === album.uri"
+              :isImageRouded="true"
+              :onClickPlay="() => playArtists(album.uri)"
+              :linkRoute="`/app/artist/${$route.params.id}/album/${album.id}`"
+            />
+          </Carousel>
+        </section>
+        <section v-if="related.length" class="sectionRelated">
+          <h2>Relacionados</h2>
+          <Carousel>
+            <Card
+              v-for="artist in related.slice(0, 10)"
+              :key="artist.id"
+              :title="artist.name"
+              subTitle=""
+              :image="artist.images[0] ? artist.images[0].url : artistImage"
+              :isPlaying="contextPlayerUri === artist.uri"
+              :isImageRouded="true"
+              :onClickPlay="() => playArtists(artist.uri)"
+              :linkRoute="`/app/artist/${artist.id}`"
+            />
+          </Carousel>
+        </section>
+      </div>
     </main>
     <Aside
       :image="album.images[0] ? album.images[0].url : artistImage"
       :onClickPlay="() => playerPlay(album.uri, 0)"
       :title="album.name"
+      :subTitle="album.artists[0].name"
       :showFollowButton="false"
       :footerText="`${album.total_tracks} músicas`"
       :options="[
@@ -83,10 +96,12 @@ import SpotifyApi from '../services/SpotifyApi';
 import { mapGetters, mapMutations, mapState } from 'vuex';
 import artistImage from '../assets/artist.jpg';
 import { getAllForPaginator } from '../utils/spotifyRequests';
+import Loading from '../components/Loading.vue';
+import { PhLink } from 'phosphor-vue';
 
 export default {
   name: 'Album',
-  components: { Page, Aside, Track, Card, Carousel },
+  components: { Page, Aside, Track, Card, Carousel, Loading, PhLink },
   watch: {
     accessToken: function () {
       this.init();
@@ -109,6 +124,7 @@ export default {
       artistImage,
       album: {},
       isFollowing: false,
+      isLoading: true,
     };
   },
   computed: {
@@ -148,6 +164,7 @@ export default {
 
       if (this.accessToken) {
         this.verifiedIfFollowing();
+        this.isLoading = true;
 
         this.album = await SpotifyApi.getAlbum(this.$route.params.id_album);
 
@@ -177,6 +194,8 @@ export default {
           }
           return 0;
         });
+
+        this.isLoading = false;
       }
     },
   },
@@ -185,63 +204,91 @@ export default {
 
 <style lang="scss" scoped>
 #artistContent {
-  padding: 48px 0;
-
-  h1 {
-    font-size: 24px;
-    margin-bottom: 32px;
-    padding: 0px 16px;
-
-    @include md {
-      font-size: 48px;
-      margin-bottom: 80px;
-      padding: 0px 48px;
-    }
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 
-  h2 {
-    margin-bottom: 16px;
-    opacity: 0.7;
-    font-size: 18px;
-    font-weight: 500;
-    display: inline-flex;
+  .content {
+    padding: 48px 0;
 
-    @include md {
-      margin-bottom: 24px;
+    h1 {
       font-size: 24px;
-    }
-  }
-
-  section {
-    margin-bottom: 24px;
-
-    @include md {
-      margin-bottom: 40px;
-    }
-  }
-
-  .sectionTracks {
-    padding: 0 16px;
-
-    @include md {
-      padding: 0 48px;
-    }
-  }
-
-  .sectionRelated,
-  .sectionAlbum {
-    h2 {
-      padding-left: 16px;
-      margin-bottom: 0px;
+      padding: 0px 16px;
 
       @include md {
-        padding-left: 48px;
+        font-size: 48px;
+        padding: 0px 48px;
       }
     }
 
-    #carouselComponentContainer {
+    > p {
+      font-size: 16px;
+      margin-bottom: 32px;
+      padding: 0px 16px;
+      margin-top: 16px;
+
       @include md {
-        margin-top: -80px;
+        font-size: 24px;
+        margin-bottom: 80px;
+        padding: 0px 48px;
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    h2 {
+      margin-bottom: 16px;
+      opacity: 0.7;
+      font-size: 18px;
+      font-weight: 500;
+      display: inline-flex;
+
+      @include md {
+        margin-bottom: 24px;
+        font-size: 24px;
+      }
+    }
+
+    section {
+      margin-bottom: 24px;
+
+      @include md {
+        margin-bottom: 40px;
+      }
+    }
+
+    .sectionTracks {
+      padding: 0 16px;
+
+      @include md {
+        padding: 0 48px;
+      }
+    }
+
+    .sectionRelated,
+    .sectionAlbum {
+      h2 {
+        padding-left: 16px;
+        margin-bottom: 0px;
+
+        @include md {
+          padding-left: 48px;
+        }
+      }
+
+      #carouselComponentContainer {
+        @include md {
+          margin-top: -80px;
+        }
       }
     }
   }

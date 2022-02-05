@@ -23,6 +23,7 @@ const routes = [
       { path: 'artist/:id', component: Artist, name: 'Artist' },
       { path: 'player', component: Player },
       { path: 'search', component: Search, name: 'Search' },
+      { path: 'about', component: Search, name: 'About' },
       { path: '*', component: Home },
     ]
   },

@@ -18,7 +18,8 @@ const state = () => ({
   topTracks: [],
   topArtists: [],
   followingArtists: [],
-  idArtistCurrent: false
+  idArtistCurrent: false,
+  user: {},
 })
 
 const getters = {
@@ -94,6 +95,13 @@ const actions = {
         })
         commit('setIdArtistCurrent', data.item.artists[0].id);
       }
+    } catch (err) { console.log(err.response) }
+  },
+
+  async getMeAction({ commit }) {
+    try {
+      const data = await SpotifyApi.getMe();
+      commit('setUser', data)
     } catch (err) { console.log(err.response) }
   },
 
@@ -238,6 +246,10 @@ const mutations = {
 
   setPlayerInstance(state, player) {
     state.player = player
+  },
+
+  setUser(state, player) {
+    state.user = player
   }
 }
 
