@@ -9,12 +9,23 @@
       <router-link to="/app/search"
         ><ph-magnifying-glass size="32"
       /></router-link>
-      <button v-if="device" @click="listenHere">
+      <button
+        v-if="device && !playerActive && user.product === 'premium'"
+        @click="listenHere"
+      >
         <ph-speaker-high size="32" />
       </button>
       <router-link to="/app/about"><ph-github-logo size="32" /></router-link>
     </div>
     <div>
+      <button
+        v-if="!playerActive && activeDevice.is_active"
+        @mouseover="openInfo"
+      >
+        <Wave />
+        <PlayerDevice :closeInfo="closeInfo" v-if="showInfo" />
+      </button>
+
       <img v-if="user.id && user.images[0]" :src="user.images[0].url" alt="" />
       <div v-if="user.id && !user.images[0]">
         {{ user.display_name.substring(0, 1).toUpperCase() }}
@@ -34,6 +45,8 @@ import {
   PhGithubLogo,
 } from 'phosphor-vue';
 import { mapMutations, mapState } from 'vuex';
+import Wave from './Wave.vue';
+import PlayerDevice from './PlayerDevice.vue';
 
 export default {
   name: 'Menu',
@@ -44,15 +57,30 @@ export default {
     PhSpeakerHigh,
     PhPlaylist,
     PhGithubLogo,
+    Wave,
+    PlayerDevice,
+  },
+  data() {
+    return {
+      showInfo: false,
+    };
   },
   computed: {
     ...mapState({
       accessToken: ({ spotify }) => spotify.accessToken,
       device: ({ spotify }) => spotify.device,
       user: ({ spotify }) => spotify.user,
+      playerActive: ({ spotify }) => spotify.playerActive,
+      activeDevice: ({ spotify }) => spotify.activeDevice,
     }),
   },
   methods: {
+    openInfo() {
+      this.showInfo = true;
+    },
+    closeInfo() {
+      this.showInfo = false;
+    },
     ...mapMutations('spotify', ['setPlaying']),
     async listenHere() {
       await SpotifyService.transferUserPlayback(this.device);
@@ -78,7 +106,7 @@ export default {
     padding: 24px 16px;
   }
 
-  div:nth-child(1) {
+  > div:nth-child(1) {
     color: #fff;
     display: none;
 
@@ -87,15 +115,21 @@ export default {
     }
   }
 
-  div:nth-child(3) {
-    color: #fff;
+  > div:nth-child(3) {
     display: none;
 
     @include md {
       display: block;
 
-      img,
-      div {
+      > button {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 32px;
+        position: relative;
+      }
+
+      > img,
+      > div {
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -112,11 +146,9 @@ export default {
     }
   }
 
-  div:nth-child(2) {
+  > div:nth-child(2) {
     display: flex;
-
     align-items: center;
-
     flex-direction: row;
     width: 100%;
     justify-content: space-around;

@@ -25,6 +25,7 @@ const state = () => ({
 const getters = {
   nowInfo: (state) => {
     if (state.now) {
+
       const durationStr = milesecsToMinutes(state.now.duration);
       const positionStr = milesecsToMinutes(state.now.position);
       const positionPerCent = Math.trunc(state.now.position * 100 / state.now.duration);
@@ -86,13 +87,24 @@ const actions = {
       const data = await SpotifyApi.getMePlayer();
 
       if (data.device) {
-        commit('setActiveDevice', data.device)
+        commit('setActiveDevice', { ...data.device, is_playing: data.is_playing })
+        if (data.context) {
+          commit('setContextPlayerUri', data.context.uri)
+        }
         commit('setNow', {
           albumName: data.item.album.name,
           albumThumb: data.item.album.images[0].url,
           artistName: data.item.artists[0].name,
           trackName: data.item.name,
-        })
+          shuffle: data.shuffle_state,
+          repeatMode: data.repeat_state,
+          position: data.progress_ms,
+          duration: data.item.duration_ms,
+          artistId: data.item.artists[0].uri.replace("spotify:artist:", ''),
+          albumId: data.item.album.uri.replace("spotify:album:", ''),
+          id: data.item.id,
+        });
+        commit('setPlaying', data.is_playing)
         commit('setIdArtistCurrent', data.item.artists[0].id);
       }
     } catch (err) { console.log(err.response) }
@@ -115,8 +127,6 @@ const actions = {
     });
 
     player.on("player_state_changed", (dataState) => {
-
-      console.log(dataState)
 
       if (dataState) {
         commit('setContextPlayerUri', dataState.context.uri)
@@ -158,6 +168,10 @@ const actions = {
 const mutations = {
   setDevice(state, device) {
     state.device = device
+  },
+
+  setActiveDevice(state, activeDevice) {
+    state.activeDevice = activeDevice
   },
 
   setSavedTracks(state, tracks) {

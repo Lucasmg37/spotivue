@@ -46,6 +46,22 @@ export default class SpotifyApi {
     return data
   }
 
+  static async playerNext() {
+    const { data } = await api.post('me/player/next');
+    return data
+  }
+
+
+  static async playerPrevious() {
+    const { data } = await api.post('me/player/previous');
+    return data
+  }
+
+  static async playerPause() {
+    const { data } = await api.put('me/player/pause');
+    return data
+  }
+
   static async setRepeatMode(mode) {
     const { data } = await api.put('me/player/repeat', {}, { params: { state: mode } });
     return data

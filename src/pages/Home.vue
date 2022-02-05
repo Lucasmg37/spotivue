@@ -126,10 +126,17 @@ const Home = {
       'getTopTracks',
       'getTopArtists',
       'getAllPlaylists',
+      'getMePlayerAction',
     ]),
     getFormattedFollowers,
-    playerPlay: SpotifyApi.playerPlay,
-    playArtists: SpotifyApi.playArtists,
+    playArtists: async function (data) {
+      await SpotifyApi.playArtists(data);
+      this.getMePlayerAction();
+    },
+    playerPlay: async function (data, position, uri) {
+      await SpotifyApi.playerPlay(data, position, uri);
+      this.getMePlayerAction();
+    },
     init: async function () {
       if (this.accessToken) {
         this.getTopTracks();
