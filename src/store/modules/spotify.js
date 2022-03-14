@@ -91,10 +91,12 @@ const actions = {
         if (data.context) {
           commit('setContextPlayerUri', data.context.uri)
         }
+
         commit('setNow', {
           albumName: data.item.album.name,
           albumThumb: data.item.album.images[0].url,
           artistName: data.item.artists[0].name,
+          artists: data.item.artists.map(item => ({ name: item.name, id: item.uri.replace("spotify:artist:", '') })),
           trackName: data.item.name,
           shuffle: data.shuffle_state,
           repeatMode: data.repeat_state,
@@ -134,6 +136,7 @@ const actions = {
           albumName: dataState.track_window.current_track.album.name,
           albumId: dataState.track_window.current_track.album.uri.replace("spotify:album:", ''),
           albumThumb: dataState.track_window.current_track.album.images[2].url,
+          artists: dataState.track_window.current_track.artists.map(item => ({ name: item.name, id: item.uri.replace("spotify:artist:", '') })),
           artistName: dataState.track_window.current_track.artists[0].name,
           artistId: dataState.track_window.current_track.artists[0].uri.replace("spotify:artist:", ''),
           trackName: dataState.track_window.current_track.name,

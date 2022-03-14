@@ -16,9 +16,14 @@
           >{{ nowInfo.albumName }}</router-link
         >
         <p>{{ nowInfo.trackName }}</p>
-        <router-link :to="`/app/artist/${nowInfo.artistId}`">{{
-          nowInfo.artistName
-        }}</router-link>
+
+        <div class="track-artists">
+          <span v-for="artist in nowInfo.artists" :key="artist.id">
+            <router-link :to="`/app/artist/${artist.id}`">{{
+              artist.name
+            }}</router-link>
+          </span>
+        </div>
       </div>
     </div>
     <div class="box-controls-bar box-flex">
@@ -353,6 +358,11 @@ export default {
     div {
       @include md {
         width: 300px;
+      }
+
+      .track-artists {
+        display: flex;
+        gap: 8px;
       }
 
       a {

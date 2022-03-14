@@ -8,6 +8,7 @@ import Artist from '../pages/Artist.vue';
 import Album from '../pages/Album.vue';
 import Search from '../pages/Search.vue';
 import Playlists from '../pages/Playlists.vue';
+import Likes from '../pages/Likes.vue';
 import Wrapper from '../layout/Wrapper.vue';
 
 
@@ -24,6 +25,7 @@ const routes = [
       { path: 'player', component: Player },
       { path: 'search', component: Search, name: 'Search' },
       { path: 'about', component: Search, name: 'About' },
+      { path: 'likes', component: Likes, name: 'Likes' },
       { path: '*', component: Home },
     ]
   },

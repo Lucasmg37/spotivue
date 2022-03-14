@@ -6,6 +6,7 @@
     <div>
       <router-link to="/app/"> <ph-house size="32" /></router-link>
       <router-link to="/app/playlist"><ph-playlist size="32" /></router-link>
+      <router-link to="/app/likes"><ph-heart size="32" /></router-link>
       <router-link to="/app/search"
         ><ph-magnifying-glass size="32"
       /></router-link>
@@ -43,6 +44,7 @@ import {
   PhSpeakerHigh,
   PhPlaylist,
   PhGithubLogo,
+  PhHeart,
 } from 'phosphor-vue';
 import { mapMutations, mapState } from 'vuex';
 import Wave from './Wave.vue';
@@ -57,6 +59,7 @@ export default {
     PhSpeakerHigh,
     PhPlaylist,
     PhGithubLogo,
+    PhHeart,
     Wave,
     PlayerDevice,
   },
