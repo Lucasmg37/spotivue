@@ -35,7 +35,9 @@
             :key="track.id"
             :title="track.name"
             :subTitle="track.artists[0].name"
-            :image="track.album.images[0].url"
+            :image="
+              track.album.images[0] ? track.album.images[0].url : artistImage
+            "
             :isPlaying="track.id === nowInfo.id"
             :onClickPlay="() => playerPlay(false, 0, [track.uri])"
           />
@@ -46,7 +48,9 @@
             :key="track.id"
             :title="track.name"
             :subTitle="track.artists[0].name"
-            :image="track.album.images[0].url"
+            :image="
+              track.album.images[0] ? track.album.images[0].url : artistImage
+            "
             :isPlaying="track.id === nowInfo.id"
             :onClickPlay="() => playerPlay(false, 0, [track.uri])"
           />
@@ -57,7 +61,7 @@
             :key="artist.id"
             :title="artist.name"
             subTitle=""
-            :image="artist.images[0].url"
+            :image="artist.images[0] ? artist.images[0].url : artistImage"
             :isPlaying="contextPlayerUri === artist.uri"
             :isImageRouded="true"
             :onClickPlay="() => playArtists(artist.uri)"
@@ -71,7 +75,7 @@
             :key="playlist.id"
             :title="playlist.name"
             :subTitle="`${playlist.tracks.total} Músicas`"
-            :image="playlist.images[0].url"
+            :image="playlist.images[0] ? playlist.images[0].url : artistImage"
             :isPlaying="contextPlayerUri === playlist.uri"
             :onClickPlay="() => playArtists(playlist.uri)"
             :linkRoute="`/app/playlist/${playlist.id}`"
@@ -88,7 +92,7 @@
             :key="artist.id"
             :title="artist.name"
             subTitle=""
-            :image="artist.images[0].url"
+            :image="artist.images[0] ? artist.images[0].url : artistImage"
             :isPlaying="contextPlayerUri === artist.uri"
             :isImageRouded="true"
             :onClickPlay="() => playArtists(artist.uri)"
