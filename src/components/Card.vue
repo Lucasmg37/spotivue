@@ -1,6 +1,6 @@
 <template>
   <div id="cardComponentContainer" :class="isPlaying ? 'isPlaying' : ''">
-    <img :class="isImageRouded && 'rouded'" :src="image" />
+    <img :class="isImageRouded && 'rouded'" :src="image || artistImage" />
     <h2>{{ title }}</h2>
     <h3>{{ subTitle }}</h3>
     <div class="overlay">
@@ -16,9 +16,13 @@
 
 <script>
 import { PhPlay, PhList } from 'phosphor-vue';
+import artistImage from '../assets/artist.jpg';
 
 export default {
   name: 'Card',
+  data: () => ({
+    artistImage,
+  }),
   props: [
     'image',
     'isPlaying',

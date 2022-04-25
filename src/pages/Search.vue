@@ -1,6 +1,9 @@
 <template>
   <main id="searchContainer">
-    <form @submit="handleSearch" class="searchInput">
+    <form
+      @submit="handleSearch"
+      :class="{ searchInput: true, hasText: !!search }"
+    >
       <button @click="clearSearch" type="button"><PhXCircle /></button>
       <input v-model="search" type="text" placeholder="Sua Pesquisa" />
       <button type="submit"><PhArrowRight /></button>
@@ -19,8 +22,13 @@
         </li>
       </ul>
     </nav>
+
+    <div v-if="!results.length && loading" class="loading">
+      <Loading />
+    </div>
+
     <div v-if="activeMenu === 'track'">
-      <section v-if="results.length" class="sectionPopular">
+      <section v-if="results.length && !!search" class="sectionPopular">
         <Track
           v-for="(track, index) in results"
           :key="track.id"
@@ -35,7 +43,7 @@
       </section>
     </div>
     <div v-if="activeMenu === 'artist'">
-      <section v-if="results.length" class="grid">
+      <section v-if="results.length && !!search" class="grid">
         <Card
           v-for="artist in results"
           :key="artist.id"
@@ -50,7 +58,7 @@
       </section>
     </div>
     <div v-if="activeMenu === 'album'">
-      <section v-if="results.length" class="grid">
+      <section v-if="results.length && !!search" class="grid">
         <Card
           v-for="album in results"
           :key="album.id"
@@ -65,13 +73,13 @@
     </div>
 
     <div v-if="activeMenu === 'playlist'">
-      <section v-if="results.length" class="grid">
+      <section v-if="results.length && !!search" class="grid">
         <Card
           v-for="album in results"
           :key="album.id"
           :title="album.name"
           :subTitle="`${album.tracks.total} Músicas`"
-          :image="album.images[0].url"
+          :image="album.images[0] && album.images[0].url"
           :isPlaying="contextPlayerUri === album.uri"
           :onClickPlay="() => playArtists(album.uri)"
           :linkRoute="`/app/playlist/${album.id}`"
@@ -79,8 +87,8 @@
       </section>
     </div>
 
-    <div class="paginator">
-      <button @click="() => handleSearchPage(page + 1)">Próxima</button>
+    <div v-if="results.length && search" class="paginator">
+      <button @click="() => handleSearchPage(page + 1)">Carregar +</button>
     </div>
   </main>
 </template>
@@ -89,13 +97,14 @@
 import { PhArrowRight, PhXCircle } from 'phosphor-vue';
 import Track from '../components/Track';
 import Card from '../components/Card';
+import Loading from '../components/Loading';
 import SpotifyApi from '../services/SpotifyApi';
 import { mapGetters, mapState } from 'vuex';
 import artistImage from '../assets/artist.jpg';
 
 export default {
   name: 'Search',
-  components: { Track, Card, PhArrowRight, PhXCircle },
+  components: { Track, Card, PhArrowRight, PhXCircle, Loading },
   watch: {
     accessToken: function () {
       this.init();
@@ -123,6 +132,7 @@ export default {
       search: '',
       results: [],
       page: 1,
+      loading: false,
     };
   },
   computed: {
@@ -159,12 +169,14 @@ export default {
     },
 
     handleSearchPage: async function (page) {
+      this.loading = true;
       const data = await this.searchSpotify(page);
       this.results = [
         ...this.results,
         ...data[this.getAttrName(this.activeMenu)].items,
       ];
       this.page = page;
+      this.loading = false;
     },
     clearSearch: function () {
       this.search = '';
@@ -201,8 +213,12 @@ export default {
     border: 2px solid rgba(255, 255, 255, 0.3);
     padding: 0px 24px;
     margin-bottom: 32px;
-    margin-top: auto;
+    margin-top: calc(50vh - 120px);
     transition: ease-in 0.2s all;
+
+    &.hasText {
+      margin-top: 0;
+    }
 
     button {
       color: rgba(255, 255, 255, 0.3);
@@ -234,7 +250,6 @@ export default {
   }
 
   nav {
-    margin-bottom: auto;
     min-height: 80px;
 
     ul {
@@ -269,6 +284,33 @@ export default {
         }
       }
     }
+  }
+
+  .paginator {
+    display: flex;
+    justify-content: end;
+    margin-top: 32px;
+
+    button {
+      color: rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      font-size: 20px;
+      padding: 8px 32px;
+      border-radius: 32px;
+      transition: ease 0.2s all;
+
+      &:hover {
+        color: rgba(255, 255, 255, 1);
+        border: 2px solid rgba(255, 255, 255, 1);
+      }
+    }
+  }
+
+  .loading {
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    margin-bottom: auto;
   }
 
   .grid {
