@@ -1,3 +1,4 @@
+import localStorageConstants from '../../constants/localStorage'
 
 const state = () => ({
   accessTokenUser: "",
@@ -8,7 +9,7 @@ const getters = {
 
 const actions = {
   userInit({ commit }) {
-    const accessToken = localStorage.getItem('@SPOTIVUE:at')
+    const accessToken = localStorage.getItem(localStorageConstants.ACCESS_TOKEN)
     if (accessToken) {
       commit('setAccessTokenUser', accessToken)
     }
@@ -20,13 +21,13 @@ const actions = {
 const mutations = {
   setAccessTokenUser(state, accessToken) {
     if (accessToken) {
-      localStorage.setItem('@SPOTIVUE:at', accessToken)
+      localStorage.setItem(localStorageConstants.ACCESS_TOKEN, accessToken)
     }
     state.accessTokenUser = accessToken
   },
 
   signOut(state) {
-    localStorage.clear()
+    localStorage.removeItem(localStorageConstants.ACCESS_TOKEN)
     state.accessTokenUser = null
   },
 

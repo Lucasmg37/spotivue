@@ -80,7 +80,18 @@
         </button>
       </div>
     </div>
-    <button class="button hide-mobile"><ph-speaker-high size="24" /></button>
+    <button class="button volume-button hide-mobile">
+      <ph-speaker-high size="24" />
+      <div class="volume-controll">
+        <input
+          v-model="defaultVolume"
+          @change="changeVolume"
+          type="range"
+          min="0"
+          max="100"
+        />
+      </div>
+    </button>
     <button class="button hide-mobile"><ph-queue size="24" /></button>
   </div>
 </template>
@@ -100,12 +111,15 @@ import {
 } from 'phosphor-vue';
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import SpotifyApi from '../services/SpotifyApi';
+import localStorageConstants from '../constants/localStorage';
 
 export default {
   name: 'PlayerBar',
   data: function () {
     return {
       interval: null,
+      defaultVolume:
+        localStorage.getItem(localStorageConstants.VOLUME_USER) || 50,
     };
   },
   watch: {
@@ -128,6 +142,10 @@ export default {
     saveTrack: async function (id) {
       await SpotifyApi.saveTrack(id);
       this.addSavedTracks({ track: { id } });
+    },
+    changeVolume: async function (e) {
+      localStorage.setItem(localStorageConstants.VOLUME_USER, e.target.value);
+      SpotifyApi.setVolume(e.target.value);
     },
     removeTrack: async function (id) {
       this.removeSavedTracks(id);
@@ -189,7 +207,7 @@ export default {
   padding: 8px 16px;
   align-items: center;
   gap: 16px;
-  overflow: hidden;
+  overflow: visible;
   position: absolute;
   width: calc(100% - 32px);
   left: 16px;
@@ -197,10 +215,31 @@ export default {
   bottom: 120px;
   background: rgba(255, 253, 253, 0.9);
 
+  .volume-controll {
+    width: 80px;
+    position: absolute;
+    display: none;
+    transform: rotate(-90deg);
+    top: -50px;
+    margin-left: 4px;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .volume-button {
+    &:hover {
+      .volume-controll {
+        display: block;
+      }
+    }
+  }
+
   @include md {
     position: relative;
     justify-content: space-between;
-    gap: 24px;
+    gap: 16px;
     padding: 16px 32px;
     width: 100%;
     left: auto;
@@ -210,7 +249,7 @@ export default {
   }
 
   .hide-mobile {
-    display: none !important;
+    display: none;
 
     @include md {
       display: flex;

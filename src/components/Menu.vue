@@ -37,6 +37,8 @@
 
 <script>
 import SpotifyService from '../services/SpotifyApi';
+import localStorageConstants from '../constants/localStorage';
+
 import {
   PhHouse,
   PhSpotifyLogo,
@@ -86,7 +88,11 @@ export default {
     },
     ...mapMutations('spotify', ['setPlaying']),
     async listenHere() {
+      const volume =
+        localStorage.getItem(localStorageConstants.VOLUME_USER) || 50;
       await SpotifyService.transferUserPlayback(this.device);
+      SpotifyService.setVolume(volume);
+
       this.setPlaying(true);
     },
   },

@@ -1,9 +1,11 @@
 import axios from "axios"
 
+import localStorageConstants from "../constants/localStorage"
+
 const api = axios.create({ baseURL: 'https://api.spotify.com/v1/' });
 
 api.interceptors.request.use(config => {
-  config.headers.Authorization = 'Bearer ' + localStorage.getItem('@SPOTIVUE:at');
+  config.headers.Authorization = 'Bearer ' + localStorage.getItem(localStorageConstants.ACCESS_TOKEN);
   return config;
 })
 
@@ -64,6 +66,11 @@ export default class SpotifyApi {
 
   static async setRepeatMode(mode) {
     const { data } = await api.put('me/player/repeat', {}, { params: { state: mode } });
+    return data
+  }
+
+  static async setVolume(volume_percent) {
+    const { data } = await api.put('me/player/volume', {}, { params: { volume_percent } });
     return data
   }
 
