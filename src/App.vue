@@ -6,7 +6,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import SpotifyApi from '.services/SpotifyApi';
+import SpotifyApi from '/services/SpotifyApi';
 
 export default {
   name: 'App',
