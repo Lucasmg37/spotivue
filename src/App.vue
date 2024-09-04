@@ -24,14 +24,14 @@ export default {
       const data = await this.userInit();
       if (data) {
         this.setAccessToken(data);
-      }
 
-      try {
-        await SpotifyApi .getMe()
-      } catch (error) {
-        localStorage.clear()
-        window.location.reload();
-        return
+        try {
+          await SpotifyApi .getMe()
+        } catch (error) {
+          localStorage.clear()
+          window.location.reload();
+          return
+        }
       }
 
       if (['/login', '/'].includes(this.$route.path) && data) {
