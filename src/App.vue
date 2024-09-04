@@ -6,6 +6,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
+import SpotifyApi from '.services/SpotifyApi';
 
 export default {
   name: 'App',
@@ -26,7 +27,7 @@ export default {
       }
 
       try {
-        await SpotifyApi.getMe()
+        await SpotifyApi .getMe()
       } catch (error) {
         localStorage.clear()
         window.location.reload();
