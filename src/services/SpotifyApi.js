@@ -121,7 +121,9 @@ export default class SpotifyApi {
 
   static async getRelatedArtist(id, params = {}) {
     console.log(id, params)
-    return []
+    return {
+      artists: []
+    }
   }
 
   static async getAlbumsArtist(params = {}, { id }) {
