@@ -120,6 +120,7 @@ export default class SpotifyApi {
   }
 
   static async getRelatedArtist(id, params = {}) {
+    return []
     const { data } = await api.get('artists/' + id + '/related-artists', { params });
     return data
   }
